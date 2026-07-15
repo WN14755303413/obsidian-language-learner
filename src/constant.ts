@@ -1,4 +1,4 @@
-import { t } from "./lang/helper";
+// import { t } from "./lang/helper";
 
 const dict = {
     NAME: "Language Learner"
@@ -27,5 +27,3 @@ interface EventMap extends GlobalEventHandlersEventMap {
 
 export { dict };
 export type { EventMap, Position }
-
-

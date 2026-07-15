@@ -38,7 +38,7 @@ export default class Server {
     }
 
     async _startListen(port: number): Promise<void> {
-        return new Promise<void>((resolve, reject) => {
+        return new Promise<void>((resolve, _reject) => {
             this._server.listen(port, () => {
                 resolve();
             });
@@ -54,7 +54,7 @@ export default class Server {
     }
 
     async _closeServer() {
-        return new Promise<void>((resolve, reject) => {
+        return new Promise<void>((resolve, _reject) => {
             this._server.close(() => {
                 resolve();
             });
@@ -118,8 +118,8 @@ export default class Server {
         }
     };
 
-    async parseData(req: http.IncomingMessage, res: http.ServerResponse): Promise<any> {
-        return new Promise<any>((resolve, reject) => {
+    async parseData(req: http.IncomingMessage, _res: http.ServerResponse): Promise<any> {
+        return new Promise<any>((resolve, _reject) => {
             let _data: number[] = [];
             req.on("data", chunk => {
                 _data.push(...chunk);
@@ -144,5 +144,3 @@ export default class Server {
         return "OTHER";
     }
 }
-
-

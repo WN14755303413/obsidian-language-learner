@@ -46,7 +46,7 @@ export interface JukuuPayload {
     lang?: JukuuLang;
 }
 
-type JukuuSearchResult = DictSearchResult<JukuuResult>;
+// type JukuuSearchResult = DictSearchResult<JukuuResult>;
 
 export const search: SearchFunction<JukuuResult> = (
     text: string,

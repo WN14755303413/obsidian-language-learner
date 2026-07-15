@@ -1,6 +1,6 @@
 import { requestUrl, RequestUrlParam, moment } from "obsidian";
 import {
-    ArticleWords, Word, Phrase, WordsPhrase, Sentence,
+    ArticleWords, WordsPhrase, Sentence,
     ExpressionInfo, ExpressionInfoSimple, CountInfo, WordCount, Span
 } from "./interface";
 
@@ -13,7 +13,7 @@ export class WebDb extends DbProvider {
     prefix: string = "/lr";
     https: boolean;
     apiKey: string;
-    
+
     get baseHeaders(): Record<string, string> {
         return {
             "LR-API-Key": this.apiKey ? this.apiKey : undefined
@@ -46,7 +46,7 @@ export class WebDb extends DbProvider {
             contentType: "application/json",
             headers: this.baseHeaders,
         };
-        
+
 
         try {
             let response = await requestUrl(request);
@@ -246,7 +246,7 @@ export class WebDb extends DbProvider {
         try {
             let res = await requestUrl(request);
             return res.json;
-        } catch (e) { }
+        } catch (e) { console.log(e)}
     }
 
     async importDB() { }

@@ -1,5 +1,5 @@
 import { moment } from "obsidian";
-import { createAutomaton, Automaton } from "ac-auto";
+import { createAutomaton } from "ac-auto";
 import { exportDB, importInto } from "dexie-export-import";
 import download from "downloadjs";
 
@@ -221,8 +221,8 @@ export class LocalDb extends DbProvider {
 
     async getCount(): Promise<CountInfo> {
         let counts: { "WORD": number[], "PHRASE": number[]; } = {
-            "WORD": new Array(5).fill(0),
-            "PHRASE": new Array(5).fill(0),
+            "WORD":  [0, 0, 0, 0, 0],
+            "PHRASE": [0, 0, 0, 0, 0],
         };
         await this.idb.expressions.each(expr => {
             counts[expr.t as "WORD" | "PHRASE"][expr.status]++;
@@ -250,7 +250,7 @@ export class LocalDb extends DbProvider {
         // 对每一天计算
         for (let span of spans) {
             // 当日
-            let today = new Array(5).fill(0);
+            let today = [0, 0, 0, 0, 0];
             await this.idb.expressions.filter(expr => {
                 return expr.t == "WORD" &&
                     expr.date >= span.from &&
@@ -259,7 +259,7 @@ export class LocalDb extends DbProvider {
                 today[expr.status]++;
             });
             // 累计
-            let accumulated = new Array(5).fill(0);
+            let accumulated = [0, 0, 0, 0, 0];
             await this.idb.expressions.filter(expr => {
                 return expr.t == "WORD" &&
                     expr.date <= span.to;
@@ -286,7 +286,7 @@ export class LocalDb extends DbProvider {
         try {
             download(blob, `${this.idb.dbName}.json`, "application/json");
         } catch (e) {
-            console.error("error exporting database");
+            console.error("error exporting database", e);
         }
     }
 
@@ -294,5 +294,3 @@ export class LocalDb extends DbProvider {
         return this.idb.delete();
     }
 }
-
-

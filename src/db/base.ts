@@ -1,6 +1,6 @@
 import {
-    ArticleWords, Word, Phrase, WordsPhrase, Sentence,
-    ExpressionInfo, ExpressionInfoSimple, CountInfo, WordCount, Span
+    ArticleWords, WordsPhrase, Sentence,
+    ExpressionInfo, ExpressionInfoSimple, CountInfo, WordCount,
 } from "./interface";
 
 

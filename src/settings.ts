@@ -1,4 +1,4 @@
-import { App, Notice, PluginSettingTab, Setting, Modal, moment, debounce } from "obsidian";
+import { App, Notice, PluginSettingTab, Setting, debounce } from "obsidian";
 
 import { WebDb } from "./db/web_db";
 import { LocalDb } from "./db/local_db";
@@ -425,7 +425,7 @@ export class SettingTab extends PluginSettingTab {
             .addButton(button => button
                 .setButtonText(t("Destroy"))
                 .setWarning()
-                .onClick(async (evt) => {
+                .onClick(async () => {
                     let modal = new WarningModal(
                         this.app,
                         t("Are you sure you want to destroy your database?"),
@@ -642,4 +642,3 @@ export class SettingTab extends PluginSettingTab {
     }
 
 }
-

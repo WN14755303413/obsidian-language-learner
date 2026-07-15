@@ -112,7 +112,7 @@ export class TextParser {
     // Plugin：在retextEnglish基础上，把AST上一些单词包裹成短语
     addPhrases() {
         let selfThis = this;
-        return function (option = {}) {
+        return function (_option = {}) {
             const proto = this.Parser.prototype;
             proto.useFirst("tokenizeParagraph", selfThis.phraseModifier);
         };
@@ -120,7 +120,7 @@ export class TextParser {
 
     phraseModifier = modifyChildren(this.wrapWord2Phrase.bind(this));
 
-    wrapWord2Phrase(node: Content, index: number, parent: Parent) {
+    wrapWord2Phrase(node: Content, _index: number, _parent: Parent) {
         if (!node.hasOwnProperty("children")) return;
 
         if (

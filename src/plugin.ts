@@ -213,7 +213,7 @@ export default class LanguageLearner extends Plugin {
             SEARCH_PANEL_VIEW,
             (leaf) => new SearchPanelView(leaf, this)
         );
-        this.addRibbonIcon(SEARCH_ICON, t("Open word search panel"), (evt) => {
+        this.addRibbonIcon(SEARCH_ICON, t("Open word search panel"), () => {
             this.activateView(SEARCH_PANEL_VIEW, "left");
         });
 
@@ -222,7 +222,7 @@ export default class LanguageLearner extends Plugin {
             LEARN_PANEL_VIEW,
             (leaf) => new LearnPanelView(leaf, this)
         );
-        this.addRibbonIcon(LEARN_ICON, t("Open new word panel"), (evt) => {
+        this.addRibbonIcon(LEARN_ICON, t("Open new word panel"), () => {
             this.activateView(LEARN_PANEL_VIEW, "right");
         });
 
@@ -234,7 +234,7 @@ export default class LanguageLearner extends Plugin {
 
         //注册统计视图
         this.registerView(STAT_VIEW_TYPE, (leaf) => new StatView(leaf, this));
-        this.addRibbonIcon(STAT_ICON, t("Open statistics"), async (evt) => {
+        this.addRibbonIcon(STAT_ICON, t("Open statistics"), async () => {
             this.activateView(STAT_VIEW_TYPE, "right");
         });
 
@@ -243,7 +243,7 @@ export default class LanguageLearner extends Plugin {
             DATA_PANEL_VIEW,
             (leaf) => new DataPanelView(leaf, this)
         );
-        this.addRibbonIcon(DATA_ICON, t("Data Panel"), async (evt) => {
+        this.addRibbonIcon(DATA_ICON, t("Data Panel"), async () => {
             this.activateView(DATA_PANEL_VIEW, "tab");
         });
     }
@@ -508,7 +508,7 @@ export default class LanguageLearner extends Plugin {
         this.registerEvent(
             this.app.workspace.on(
                 "editor-menu",
-                (menu: Menu, editor: Editor, view: MarkdownView) => {
+                (menu: Menu, editor: Editor, _view: MarkdownView) => {
                     let selection = editor.getSelection();
                     if (selection || selection.trim().length === selection.length) {
                         addMemu(menu, selection);
