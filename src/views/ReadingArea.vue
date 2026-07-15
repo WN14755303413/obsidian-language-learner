@@ -105,16 +105,17 @@ const themeConfig: GlobalThemeOverrides = {
     },
 };
 
-const localPrefix = require("electron").ipcRenderer.sendSync("file-url");
+const prefix = Platform.isDesktopApp
+    ? require("electron").ipcRenderer.sendSync("file-url")
+    : "http://localhost/_capacitor_file_";
 // app.vault.adapter.getResourcePath("");
 let frontMatter = plugin.app.metadataCache.getFileCache(view.file).frontmatter;
 let audioSource = (frontMatter["langr-audio"] || "") as string;
 if (audioSource && audioSource.startsWith("~/")) {
-    const prefix = Platform.isDesktopApp ? localPrefix : "http://localhost/_capacitor_file_";
     audioSource =
         prefix + plugin.constants.basePath + audioSource.slice(1);
 }else {
-    audioSource = audioSource.startsWith("http") ? audioSource : localPrefix + audioSource;
+    audioSource = audioSource.startsWith("http") ? audioSource : prefix + audioSource;
 }
 
 // 记笔记
