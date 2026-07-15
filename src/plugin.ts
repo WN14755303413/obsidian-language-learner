@@ -366,8 +366,9 @@ export default class LanguageLearner extends Plugin {
 
     // 在MardownView的扩展菜单加一个转为Reading模式的选项
     registerReadingToggle = () => {
+        // oxlint-disable-next-line typescript/no-this-alias
         const pluginSelf = this;
-        pluginSelf.register(
+        this.register(
             around(MarkdownView.prototype, {
                 onPaneMenu(next) {
                     return function (m: Menu) {
@@ -396,7 +397,7 @@ export default class LanguageLearner extends Plugin {
         );
 
         // 增加标题栏切换阅读模式和mardown模式的按钮
-        pluginSelf.register(
+        this.register(
             around(WorkspaceLeaf.prototype, {
                 setViewState(next) {
                     return function (state: ViewState, ...rest: any[]): Promise<void> {

@@ -111,6 +111,7 @@ export class TextParser {
 
     // Plugin：在retextEnglish基础上，把AST上一些单词包裹成短语
     addPhrases() {
+        // oxlint-disable-next-line typescript/no-this-alias
         let selfThis = this;
         return function (_option = {}) {
             const proto = this.Parser.prototype;
@@ -172,6 +173,7 @@ export class TextParser {
 
     // Compiler部分: 在AST转换为string时包裹上相应标签
     stringfy2HTML() {
+        // oxlint-disable-next-line typescript/no-this-alias
         let selfThis = this;
         return function () {
             Object.assign(this, {
