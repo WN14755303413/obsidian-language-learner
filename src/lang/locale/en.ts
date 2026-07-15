@@ -106,7 +106,6 @@ export default {
     "Dictionaries": "Dictionaries",
     "Youdao": "Youdao",
     "Cambridge": "Cambridge",
-    "Jukuu": "Jukuu",
     "Hujiang": "Hujiang",
 
     "Word Database Path": "Word Database Path",

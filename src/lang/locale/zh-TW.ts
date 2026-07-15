@@ -93,7 +93,6 @@ export default {
     "Dictionaries": "詞典",
     "Youdao": "有道詞典",
     "Cambridge": "劍橋詞典",
-    "Jukuu": "句酷",
     "Hujiang": "滬江小D",
 
     "Word Database Path": "單字資料庫路徑",

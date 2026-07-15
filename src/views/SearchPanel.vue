@@ -43,7 +43,7 @@ let map: { [K in string]: number } = {};
 let loadings = ref<boolean[]>([]);
 let shows = ref<boolean[]>([]);
 watch(() => plugin.store.dictsChange, () => {
-    let collection = Object.keys(plugin.settings.dictionaries)
+    let collection = Object.keys(dicts)
         .map((dict: keyof typeof dicts) => {
             return {
                 id: dict,

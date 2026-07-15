@@ -572,14 +572,25 @@ export default class LanguageLearner extends Plugin {
     }
 
     async loadSettings() {
+        let data = (await this.loadData()) || {};
+        const savedDictionaries =
+            typeof data.dictionaries === "object" && data.dictionaries !== null
+                ? data.dictionaries
+                : {};
+        const dictionaries = Object.fromEntries(
+            Object.entries(DEFAULT_SETTINGS.dictionaries).map(([id, defaults]) => [
+                id,
+                Object.assign({}, defaults, savedDictionaries[id]),
+            ])
+        );
         let settings: { [K in string]: any } = Object.assign(
             {},
-            DEFAULT_SETTINGS
+            DEFAULT_SETTINGS,
+            { dictionaries }
         );
-        let data = (await this.loadData()) || {};
         for (let key in DEFAULT_SETTINGS) {
             let k = key as keyof typeof DEFAULT_SETTINGS;
-            if (data[k] === undefined) {
+            if (k === "dictionaries" || data[k] === undefined) {
                 continue;
             }
 
@@ -590,11 +601,6 @@ export default class LanguageLearner extends Plugin {
             }
         }
         (this.settings as any) = settings;
-        // this.settings = Object.assign(
-        //     {},
-        //     DEFAULT_SETTINGS,
-        //     await this.loadData()
-        // );
     }
 
     async saveSettings() {

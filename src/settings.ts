@@ -63,9 +63,8 @@ export const DEFAULT_SETTINGS: MyPluginSettings = {
     dictionaries: {
         "youdao": { enable: true, priority: 1 },
         "cambridge": { enable: true, priority: 2 },
-        "jukuu": { enable: true, priority: 3 },
-        "hjdict": { enable: true, priority: 4 },
-        "deepl": { enable: true, priority: 5 },
+        "hjdict": { enable: true, priority: 3 },
+        "deepl": { enable: true, priority: 4 },
     },
     dict_height: "250px",
     // indexed
