@@ -172,7 +172,7 @@ export class LocalDb extends DbProvider {
             sentences,
             tags: new Set<string>(payload.tags),
             connections: new Map<string, string>(),
-            date: moment().unix()
+            date: Math.floor(moment.now() / 1000)
         };
         if (stored) {
             await this.idb.expressions.update(stored.id, updatedWord);
@@ -203,11 +203,11 @@ export class LocalDb extends DbProvider {
                     meaning: "",
                     status: 0,
                     t: "WORD",
-                    notes: [],
+                    notes: [] as string[],
                     sentences: new Set(),
                     tags: new Set(),
                     connections: new Map<string, string>(),
-                    date: moment().unix()
+                    date: Math.floor(moment.now() / 1000)
                 };
             })
         );
@@ -237,7 +237,7 @@ export class LocalDb extends DbProvider {
     async countSeven(): Promise<WordCount[]> {
         let spans: Span[] = [];
         spans = [0, 1, 2, 3, 4, 5, 6].map((i) => {
-            let start = moment().subtract(6, "days").startOf("day");
+            let start = moment.unix(moment.now() / 1000).subtract(6, "days").startOf("day");
             let from = start.add(i, "days");
             return {
                 from: from.unix(),

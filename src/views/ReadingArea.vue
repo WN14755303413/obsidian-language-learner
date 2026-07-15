@@ -144,7 +144,7 @@ watchEffect(async (clean) => {
 function onMouseOver(e: MouseEvent) {
     let target = e.target as HTMLElement;
     if (target.hasClass("internal-link")) {
-        app.workspace.trigger("hover-link", {
+        plugin.app.workspace.trigger("hover-link", {
             event: e,
             source: "preview",
             hoverParent: { hoverPopover: null },

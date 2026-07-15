@@ -227,7 +227,7 @@ export class WebDb extends DbProvider {
         let spans: Span[] = [];
 
         spans = [0, 1, 2, 3, 4, 5, 6].map((i) => {
-            let start = moment().subtract(6, "days").startOf("day");
+            let start = moment.unix(moment.now() / 1000).subtract(6, "days").startOf("day");
             let from = start.add(i, "days");
             return {
                 from: from.unix(),

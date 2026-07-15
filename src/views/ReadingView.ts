@@ -2,7 +2,7 @@ import { Menu, TextFileView, WorkspaceLeaf, Notice } from 'obsidian';
 import { App as VueApp, createApp } from 'vue';
 
 import LanguageLearner from '@/plugin';
-import ReadingArea from 'ReadingArea.vue';
+import ReadingArea from './ReadingArea.vue';
 import { t } from "@/lang/helper";
 
 

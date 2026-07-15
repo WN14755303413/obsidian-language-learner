@@ -30,7 +30,6 @@ import { moment } from "obsidian";
 import {
     h,
     ref,
-    reactive,
     computed,
     watch,
     watchEffect,
@@ -138,7 +137,7 @@ function handleCheck(rowKeys: DataTableRowKey[]) {
     rowKeysRef.value = rowKeys;
 }
 
-let collumns = reactive<DataTableColumns<Row>>([
+const collumns: DataTableColumns<Row> = [
     // {
     //     type: "selection",
     // },
@@ -155,8 +154,8 @@ let collumns = reactive<DataTableColumns<Row>>([
     {
         title: "Expr",
         key: "expr",
-        sorter: "default",
-        filter(_, row) {
+        sorter: "default" as const,
+        filter(_: string | number, row: Row) {
             if (!searchText.value) return true;
 
             return row.expr.contains(searchText.value);
@@ -175,7 +174,7 @@ let collumns = reactive<DataTableColumns<Row>>([
             { label: t("Known"), value: t("Known") },
             { label: t("Learned"), value: t("Learned") },
         ],
-        filter(value, row) {
+        filter(value: string | number, row: Row) {
             return row.status === value;
         },
     },
@@ -188,7 +187,7 @@ let collumns = reactive<DataTableColumns<Row>>([
     {
         title: "Tags",
         key: "tags",
-        render(row) {
+        render(row: Row) {
             return row.tags.map((tag: string) =>
                 h(
                     NTag,
@@ -201,7 +200,7 @@ let collumns = reactive<DataTableColumns<Row>>([
                 )
             );
         },
-        filter(value, row) {
+        filter(value: string | number, row: Row) {
             if (selectedTags.value.length === 0) {
                 return true;
             }
@@ -214,11 +213,11 @@ let collumns = reactive<DataTableColumns<Row>>([
     {
         title: "Date",
         key: "date",
-        sorter(row1, row2) {
+        sorter(row1: Row, row2: Row) {
             return moment.utc(row1.date).unix() - moment.utc(row2.date).unix();
         },
     },
-]);
+];
 
 
 </script>

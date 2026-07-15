@@ -61,7 +61,7 @@ onMounted(async () => {
 });
 
 const last7days = [6, 5, 4, 3, 2, 1, 0].map((i) =>
-	moment().subtract(i, "days").format("M-D")
+	moment.unix(moment.now() / 1000).subtract(i, "days").format("M-D")
 );
 
 option = {

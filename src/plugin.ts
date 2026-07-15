@@ -35,6 +35,7 @@ import type { Position } from "./constant";
 import { InputModal } from "./modals"
 
 import Global from "./views/Global.vue";
+import "./stalin.css";
 
 
 
@@ -291,7 +292,7 @@ export default class LanguageLearner extends Plugin {
 
         let classified: number[][] = Array(5)
             .fill(0)
-            .map((_) => []);
+            .map((): number[] => []);
         words.forEach((word, i) => {
             classified[word.status].push(i);
         });
@@ -428,7 +429,10 @@ export default class LanguageLearner extends Plugin {
                 setViewState(next) {
                     return function (state: ViewState, ...rest: any[]): Promise<void> {
                         return (next.apply(this, [state, ...rest]) as Promise<void>).then(() => {
-                            if (state.type === "markdown" && state.state?.file) {
+                            if (
+                                state.type === "markdown" &&
+                                typeof state.state?.file === "string"
+                            ) {
                                 const cache = pluginSelf.app.metadataCache
                                     .getCache(state.state.file);
                                 if (cache?.frontmatter && cache.frontmatter[FRONT_MATTER_KEY]) {
