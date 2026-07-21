@@ -20,7 +20,7 @@ export async function search(text: string, lang: string = ""): Promise<string | 
     };
 
     const data: RequestUrlParam = {
-        url: "https://deeplx.vercel.app/translate",
+        url: "https://deeplx.1stg.me/translate",
         method: "POST",
         body: JSON.stringify(payload),
         contentType: "application/json"
