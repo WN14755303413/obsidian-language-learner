@@ -3,12 +3,12 @@
         <header class="dict-item-header" @click="onOpen">
             <div :class="['dict-icon', props.id]"></div>
             <span class="dict-name">{{ props.name }}</span>
-            <div class="dict-loading" style="padding-left: 20px">
+            <div class="dict-loading">
                 searching...
             </div>
             <div class="empty-area"></div>
-            <button>
-                <svg class="fold-arrow" width="18" height="18" viewBox="0 0 59.414 59.414"
+            <button class="fold-arrow-btn" aria-label="Toggle dictionary">
+                <svg class="fold-arrow" width="12" height="12" viewBox="0 0 59.414 59.414"
                     xmlns="http://www.w3.org/2000/svg">
                     <path class="dictItemHead-FoldArrowPath"
                         d="M43.854 59.414L14.146 29.707 43.854 0l1.414 1.414-28.293 28.293L45.268 58"></path>
@@ -20,7 +20,7 @@
                 <slot></slot>
             </article>
             <button class="fold-mask" @click="onExpand">
-                <svg class="fold-mask-arrow" width="15" height="15" viewBox="0 0 59.414 59.414"
+                <svg class="fold-mask-arrow" width="14" height="14" viewBox="0 0 59.414 59.414"
                     xmlns="http://www.w3.org/2000/svg">
                     <path d="M58 14.146L29.707 42.44 1.414 14.145 0 15.56 29.707 45.27 59.414 15.56"></path>
                 </svg>
@@ -31,9 +31,7 @@
 
 <script setup lang="ts">
 import { ref, watch, getCurrentInstance, toRef } from "vue";
-import { Platform } from "obsidian";
 import PluginType from "@/plugin";
-import { getRGB } from "@/utils/style";
 
 const plugin = getCurrentInstance().appContext.config.globalProperties
     .plugin as PluginType;
@@ -74,82 +72,99 @@ function onOpen() {
 function onExpand() {
     isExpand.value = true;
 }
-
-// react to theme change
-let bgRGB = Platform.isMobileApp ?
-    getRGB(".workspace-drawer.mod-left", "background-color") :
-    getRGB(".workspace-leaf", "background-color");
-let makeRGBA = (rgb: typeof bgRGB, alpha: number) =>
-    `rgba(${rgb.R},${rgb.G},${rgb.B}, ${alpha})`;
-let bgRGBA1 = ref(makeRGBA(bgRGB, 0));
-let bgRGBA2 = ref(makeRGBA(bgRGB, 0.5));
-let bgRGBA3 = ref(makeRGBA(bgRGB, 1));
-setTimeout(() => {
-    // 有时加载太慢，workspace的颜色还没出来，所以强制刷新一次
-    let bgRGB = Platform.isMobileApp ?
-        getRGB(".workspace-drawer.mod-left", "background-color") :
-        getRGB(".workspace-leaf", "background-color");
-    bgRGBA1.value = makeRGBA(bgRGB, 0);
-    bgRGBA2.value = makeRGBA(bgRGB, 0.5);
-    bgRGBA3.value = makeRGBA(bgRGB, 1);
-}, 5000);
-watch(
-    () => plugin.store.themeChange,
-    () => {
-        bgRGB = Platform.isMobileApp ?
-            getRGB(".workspace-drawer.mod-left", "background-color") :
-            getRGB(".workspace-leaf", "background-color");
-        bgRGBA1.value = makeRGBA(bgRGB, 0);
-        bgRGBA2.value = makeRGBA(bgRGB, 0.5);
-        bgRGBA3.value = makeRGBA(bgRGB, 1);
-    }
-);
 </script>
 
 <style lang="scss">
 .dict-item {
+    margin-bottom: 2px;
+    interpolate-size: allow-keywords;
+
     header.dict-item-header {
         display: flex;
+        align-items: center;
+        position: relative;
         position: sticky;
         top: 0;
         z-index: 100;
-        border-top: 2px dashed gray;
-        background-color: v-bind(bgRGBA3);
-        height: 22px;
+        border-top: 1px solid var(--background-modifier-border, var(--divider-color, rgba(128, 128, 128, 0.25)));
+        background-color: var(--background-secondary);
+        height: 24px;
+        padding: 0 4px;
+        cursor: pointer;
+        user-select: none;
+
+        &::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background-color: var(--background-modifier-hover);
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.15s ease;
+            z-index: 0;
+        }
+
+        &:hover::before {
+            opacity: 1;
+        }
+
+        .dict-icon,
+        .dict-name,
+        .dict-loading,
+        .empty-area,
+        .fold-arrow-btn {
+            position: relative;
+            z-index: 1;
+        }
 
         .dict-icon {
-            height: 20px;
-            width: 20px;
+            height: 16px;
+            width: 16px;
             background-size: cover;
+            flex-shrink: 0;
         }
 
         .dict-name {
-            padding-left: 3px;
-            line-height: 20px;
+            padding-left: 6px;
+            font-size: 0.92em;
+            font-weight: 500;
+            color: var(--text-normal);
+            line-height: 24px;
+        }
+
+        .dict-loading {
+            font-size: 0.85em;
+            color: var(--text-muted);
+            padding-left: 12px;
+            font-style: italic;
         }
 
         .empty-area {
             flex: 1;
         }
 
-        button {
-            color: rgb(236, 239, 244);
-            width: 19px;
-            height: 19px;
-            background: 0 0;
+        .fold-arrow-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-muted);
+            width: 18px;
+            height: 18px;
+            background: transparent;
             border: none;
             padding: 0;
             cursor: pointer;
             box-shadow: none;
+            border-radius: 3px;
 
             &:hover {
                 box-shadow: none;
+                background-color: var(--background-modifier-hover);
             }
 
             .fold-arrow {
-                transition: transform 0.4s;
-                padding: 3px;
-                fill: gray;
+                transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+                fill: var(--text-muted);
             }
         }
     }
@@ -157,31 +172,44 @@ watch(
     .dict-item-body {
         position: relative;
         overflow: hidden;
-        padding-top: 10px;
-        transition: max-height 1s cubic-bezier(0, 1, 0, 1);
-        padding-left: 10px;
-        padding-right: 10px;
+        padding: 0;
+        background-color: var(--background-secondary);
+        transition: height 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+        height: 0;
+
+        article {
+            padding: 6px 4px 4px 4px;
+            background-color: var(--background-secondary);
+        }
 
         .fold-mask {
             position: absolute;
             left: 0;
             bottom: 0;
             width: 100%;
-            height: 50px;
+            height: 32px;
             padding: 0;
             border: none;
             box-shadow: none;
-            background: linear-gradient(v-bind(bgRGBA1) 40%,
-                    v-bind(bgRGBA2) 60%,
-                    v-bind(bgRGBA3) 100%);
+            background: linear-gradient(
+                to bottom,
+                transparent 0%,
+                var(--background-secondary) 85%
+            );
             cursor: pointer;
+            display: flex;
+            align-items: flex-end;
+            justify-content: center;
+            padding-bottom: 2px;
 
             .fold-mask-arrow {
-                position: absolute;
-                z-index: 10;
-                bottom: 0;
-                fill: gray;
-                margin: 0 auto;
+                fill: var(--text-muted);
+                transition: fill 0.15s ease, transform 0.15s ease;
+            }
+
+            &:hover .fold-mask-arrow {
+                fill: var(--text-normal);
+                transform: translateY(1px);
             }
         }
     }
@@ -192,7 +220,19 @@ watch(
         }
 
         .dict-item-body {
-            max-height: 10px;
+            height: calc-size(0px, size);
+        }
+    }
+
+    &.open {
+        .fold-arrow {
+            transform: rotate(-90deg);
+        }
+    }
+
+    &.open:not(.expand) {
+        .dict-item-body {
+            height: calc-size(auto, min(size, v-bind(defaultHeight)));
         }
     }
 
@@ -202,21 +242,8 @@ watch(
         }
 
         .dict-item-body {
-            max-height: 5000px;
-            transition: max-height 2s ease-in-out;
-        }
-    }
-
-    &.open {
-        .fold-arrow {
-            transform: rotate(-90deg);
-            transition: transform 0.4s;
-        }
-    }
-
-    &.open:not(.expand) {
-        .dict-item-body {
-            max-height: v-bind(defaultHeight);
+            height: calc-size(auto, size);
+            transition: height 0.4s cubic-bezier(0.4, 0, 0.2, 1);
         }
     }
 

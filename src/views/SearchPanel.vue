@@ -1,19 +1,26 @@
 <template>
     <div id="langr-search" @click="handleClick">
         <NConfigProvider :theme="theme" :theme-overrides="themeConfig">
-            <div class="search-bar" style="display:flex;">
-                <NButtonGroup size="tiny">
-                    <NButton :disabled="historyIndex <= 0" @click="switchHistory('prev')">{{ `<` }} </NButton>
-                            <NButton :disabled="historyIndex >= lastHistory" @click="switchHistory('next')">{{ ">" }}
-                            </NButton>
+            <div class="search-bar">
+                <NButtonGroup size="small">
+                    <NButton tag="div" :disabled="historyIndex <= 0" @click="switchHistory('prev')">{{ `<` }} </NButton>
+                    <NButton tag="div" :disabled="historyIndex >= lastHistory" @click="switchHistory('next')">{{ ">" }}
+                    </NButton>
                 </NButtonGroup>
-                <NInput size="tiny" type="text" placeholder="输入单词" v-model:value="inputWord" style="flex:1;"
+                <NInput size="small" type="text" placeholder="输入单词" v-model:value="inputWord" style="flex:1;"
                     @keydown.enter="handleSearch" />
-                <NButton size="tiny" @click="handleSearch" style="margin-left:5px;">{{ t("Search") }}</NButton>
+                <NButton tag="div" circle size="small" @click="handleSearch" aria-label="Search">
+                    <template #icon>
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="11" cy="11" r="8"></circle>
+                            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                        </svg>
+                    </template>
+                </NButton>
             </div>
         </NConfigProvider>
         <div class="dict-area" style="overflow:auto;">
-            <DictItem v-for="(cp, i) in components" :loading="loadings[i]" :name="cp.name" :id="cp.id">
+            <DictItem v-for="(cp, i) in components" :loading="loadings[i]" :name="cp.name" :key="cp.id" :id="cp.id">
                 <KeepAlive>
                     <Component @loading="loading" :is="cp.type" :word="word" v-show="shows[i]"></Component>
                 </KeepAlive>
@@ -23,7 +30,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, watch, onMounted, onUnmounted, getCurrentInstance } from "vue";
+import { ref, shallowRef, computed, watch, onMounted, onUnmounted, getCurrentInstance } from "vue";
 import { NConfigProvider, NButton, NButtonGroup, NInput, darkTheme, GlobalThemeOverrides } from "naive-ui";
 
 import DictItem from "./DictItem.vue";
@@ -38,7 +45,7 @@ const themeConfig: GlobalThemeOverrides = {
 
 };
 
-let components = ref([]);
+let components = shallowRef([]);
 let map: { [K in string]: number } = {};
 let loadings = ref<boolean[]>([]);
 let shows = ref<boolean[]>([]);
@@ -148,21 +155,42 @@ onUnmounted(() => {
     height: 100%;
     width: 100%;
     overflow: hidden;
-    font-size: 0.8em;
+    font-size: 0.9em;
     user-select: text;
     display: flex;
     flex-direction: column;
 
     .search-bar {
-        margin-bottom: 5px;
-
-        button {
-            margin-right: 5px;
-        }
+        padding: 4px;
+        display: flex;
+        align-items: center;
+        gap: 4px;
     }
 
     .dict-area {
         flex: 1;
+        padding-left: 4px;
+        overflow-y: auto;
+        scrollbar-gutter: stable;
+        scrollbar-width: thin;
+        scrollbar-color: var(--scrollbar-thumb-bg, rgba(128, 128, 128, 0.25)) transparent;
+
+        &::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        &::-webkit-scrollbar-thumb {
+            background-color: var(--scrollbar-thumb-bg, rgba(128, 128, 128, 0.25));
+            border-radius: 3px;
+
+            &:hover {
+                background-color: var(--scrollbar-active-thumb-bg, rgba(128, 128, 128, 0.45));
+            }
+        }
+
+        &::-webkit-scrollbar-track {
+            background: transparent;
+        }
     }
 }
 
