@@ -188,6 +188,7 @@ function onExpand() {
             bottom: 0;
             width: 100%;
             height: 32px;
+            z-index: 10;
             padding: 0;
             border: none;
             box-shadow: none;
